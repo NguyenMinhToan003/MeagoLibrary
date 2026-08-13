@@ -1,0 +1,24 @@
+{
+  "name": "@meago/core",
+  "version": "0.1.0",
+  "description": "Shared contracts (DTO, interfaces, enums, constants) between MeagoServer and MeagoClient",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsup",
+    "check": "tsc --noEmit",
+    "check:watch": "tsc --noEmit --watch",
+    "pub": "npm run build && npm publish"
+  },
+  "publishConfig": {
+    "access": "restricted"
+  },
+  "author": "Meago",
+  "license": "MIT",
+  "devDependencies": {
+    "tsup": "^8.5.1",
+    "typescript": "^5.5.0"
+  }
+}
