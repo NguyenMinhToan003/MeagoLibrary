@@ -54,7 +54,15 @@ Consumer chỉ import từ `@meago/core`, không import `@meago/core/dist/...`.
 4. Chạy `npm publish` hoặc `npm run pub`.
 5. Nâng cùng version ở Server và Client, sau đó chạy test của cả hai repo.
 
-Package đang cấu hình `access: restricted`; registry/account deploy phải hỗ trợ scoped private package. Đổi sang `public` nếu chủ đích phát hành công khai.
+Package được phát hành công khai với `publishConfig.access=public`. Npm account/token vẫn phải đáp ứng chính sách 2FA hoặc granular token có quyền bypass 2FA khi publish tự động.
+
+Trên Windows có thể chạy quy trình có kiểm soát:
+
+```powershell
+.\commit.bat
+```
+
+Script chạy `verify` trước khi commit, pull bằng rebase trên branch hiện tại và hỏi riêng trước khi publish. Khi phát hành, người dùng phải chọn `patch`/`minor`/`major`; `npm version` cập nhật cả `package.json`, lockfile, tạo release commit và Git tag. Package được publish rõ ràng với `--access public`, sau đó branch/tag mới được push. Script không force-push, không tự xử lý conflict và dừng ngay khi một gate thất bại.
 
 ## Compatibility
 
@@ -62,4 +70,3 @@ Package đang cấu hình `access: restricted`; registry/account deploy phải h
 - Minor: thêm export hoặc field optional.
 - Major: xóa/đổi export, thêm field required hoặc đổi semantics.
 - Entity database không phải contract và không được export từ library.
-
