@@ -1,49 +1,65 @@
-# @meago/core (MeagoLibrary)
+# @meago/core
 
-Package contract dùng chung giữa **MeagoServer** (NestJS) và **MeagoClient** (Next.js) — theo mô hình `@allinsocial/automation-core` của hệ thống mẫu. Một nguồn chân lý duy nhất cho: envelope response, query phân trang, DTO auth, model interface, permission string, API path constant.
+Core TypeScript dùng chung cho MeagoServer, MeagoClient và các dự án Meago tiếp theo. Package cung cấp contract ổn định cùng các primitive nền tảng, không phụ thuộc NestJS, React, TypeORM, Redis hoặc domain nghiệp vụ cụ thể.
 
-## Cấu trúc
+## Phạm vi
+
+- Response, error và pagination contract.
+- Auth contract dùng chung cho JWT và stateful session.
+- Result và transport-neutral error.
+- Permission helpers.
+- Clock, ID, hash và transaction ports.
+- API path và response factory.
+
+Framework adapter thuộc package hoặc layer khác. Không đưa controller, entity, guard hay React hook vào package này.
+
+## Ví dụ
+
+```ts
+import {
+  AuthMode,
+  normalizePagination,
+  ok,
+  type AuthPrincipal,
+  type Result,
+} from '@meago/core';
+
+const pagination = normalizePagination({ page: 1, limit: 200 }, { maxLimit: 100 });
+const principal: AuthPrincipal = { subjectId: 'user-id', sessionId: 'session-id' };
+const result: Result<string, Error> = ok(`${principal.subjectId}:${AuthMode.SESSION}`);
 ```
-src/
-  constants/          # API_VERSION, API_CONTROLLERS, API_ACTIONS, PERMISSIONS (resource:action)
-  enums/              # EUserStatus, ESortDir
-  dto/auth/           # ILoginDto, IRegisterDto, ITokenResponse, IJwtPayload
-  interfaces/common/  # IBaseResponse, IErrorResponse, IPaginatedResult, IBaseQuery, IBaseModel
-  interfaces/models/  # ICurrentUser, IUser, IRole, IPermission
-  index.ts            # barrel kép: named export + namespace (MeagoConstants, MeagoDto, ...)
-```
 
-## Cách vận hành
+## Phát triển
 
-### Build
 ```bash
 npm install
-npm run build     # tsup → dist/ (CJS + ESM + .d.ts)
-npm run check     # tsc --noEmit
+npm run verify
 ```
 
-### Dùng trong BE/FE khi CHƯA có npm registry (hiện tại)
-Cài bằng đường dẫn local — npm tự symlink, không cần publish:
+`verify` chạy strict type-check, build ESM/CJS/declaration, smoke test và kiểm tra nội dung tarball.
+
+## Dùng local
+
 ```bash
-# trong MeagoServer hoặc MeagoClient
 npm install ../MeagoLibrary
 ```
-`package.json` của app sẽ có `"@meago/core": "file:../MeagoLibrary"`. Import như package thường:
-```ts
-import { IBaseResponse, PERMISSIONS, MeagoDto } from '@meago/core';
-```
 
-### Quy trình khi sửa/thêm contract
-1. Sửa code trong `src/` của MeagoLibrary.
-2. `npm run build` (app đọc từ `dist/`, KHÔNG build là app vẫn thấy type cũ).
-3. Restart dev server của app (Next/Nest cache module).
+Consumer chỉ import từ `@meago/core`, không import `@meago/core/dist/...`.
 
-### Khi có npm registry (sau này)
-1. Tăng `version` trong package.json (semver: sửa contract cũ = major, thêm mới = minor).
-2. `npm run pub` (build + publish, `access: restricted`).
-3. BE/FE đổi `file:../MeagoLibrary` → `"@meago/core": "^x.y.z"` và `npm update`.
+## Phát hành
 
-## Nguyên tắc
-- **Chỉ chứa type/constant thuần** — không runtime dependency, không import NestJS/React/class-validator. (Khác nguồn mẫu vốn kéo cả sharp/nodemailer vào lib — tránh.)
-- BE entity/DTO có thể implement interface ở đây (`class UserEntity implements IUser`) để lệch contract là TypeScript báo ngay.
-- Permission string mới: thêm vào `PERMISSIONS` trước, rồi BE `@RequirePermissions(PERMISSIONS.STORY.CREATE)` và FE `can(PERMISSIONS.STORY.CREATE)` cùng đọc từ đây.
+1. Chạy `npm run verify`.
+2. Cập nhật `CHANGELOG.md`.
+3. Tăng version theo semver.
+4. Chạy `npm publish` hoặc `npm run pub`.
+5. Nâng cùng version ở Server và Client, sau đó chạy test của cả hai repo.
+
+Package đang cấu hình `access: restricted`; registry/account deploy phải hỗ trợ scoped private package. Đổi sang `public` nếu chủ đích phát hành công khai.
+
+## Compatibility
+
+- Patch: không đổi public contract hoặc behavior.
+- Minor: thêm export hoặc field optional.
+- Major: xóa/đổi export, thêm field required hoặc đổi semantics.
+- Entity database không phải contract và không được export từ library.
+

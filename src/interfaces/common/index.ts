@@ -1,6 +1,5 @@
-import { ESortDir } from '../../enums';
+import type { ESortDir } from '../../enums';
 
-/** Envelope response chuẩn — BE TransformInterceptor tạo ra, FE unwrap. */
 export interface IBaseResponse<T> {
   statusCode: number;
   message: string;
@@ -8,33 +7,35 @@ export interface IBaseResponse<T> {
   timestamp: string;
 }
 
-/** Shape lỗi chuẩn — BE HttpExceptionFilter/TypeOrmExceptionFilter tạo ra. */
-export interface IErrorResponse {
+
+export interface IErrorResponse<TDetails = unknown> {
   statusCode: number;
   error: string;
   message: string | string[];
   path: string;
   timestamp: string;
+  code?: string;
+  details?: TDetails;
 }
 
-/** Kết quả danh sách phân trang — BE BaseService.findMulti trả về. */
 export interface IPaginatedResult<T> {
   items: T[];
   totalItems: number;
   page: number;
   limit: number;
+  totalPages?: number;
+  hasNextPage?: boolean;
+  hasPreviousPage?: boolean;
 }
 
-/** Query chuẩn cho endpoint danh sách — mirror BaseQueryDto của BE. */
-export interface IBaseQuery {
+export interface IBaseQuery<TSortBy extends string = string> {
   page?: number;
   limit?: number;
-  sortBy?: string;
+  sortBy?: TSortBy;
   sortDir?: ESortDir | 'ASC' | 'DESC';
   search?: string;
 }
 
-/** Field chung mọi entity — mirror BaseEntity của BE. */
 export interface IBaseModel {
   id: string;
   version: number;

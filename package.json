@@ -1,15 +1,28 @@
 {
   "name": "@meago/core",
-  "version": "0.1.0",
-  "description": "Shared contracts (DTO, interfaces, enums, constants) between MeagoServer and MeagoClient",
+  "version": "0.2.0",
+  "description": "Framework-neutral contracts and core primitives for Meago applications",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
-  "files": ["dist"],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsup",
     "check": "tsc --noEmit",
     "check:watch": "tsc --noEmit --watch",
+    "test": "node scripts/smoke.mjs",
+    "pack:check": "npm pack --dry-run --cache .npm-cache",
+    "verify": "npm run check && npm run build && npm run test && npm run pack:check",
     "pub": "npm run build && npm publish"
   },
   "publishConfig": {
@@ -19,6 +32,6 @@
   "license": "MIT",
   "devDependencies": {
     "tsup": "^8.5.1",
-    "typescript": "^5.5.0"
+    "typescript": "^5.9.3"
   }
 }
