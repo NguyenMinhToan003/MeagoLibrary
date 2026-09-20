@@ -1,7 +1,7 @@
 import { EAuditActorType, EAuditOutcome, EUserStatus } from '../../enums';
 import { IBaseModel } from '../common';
 
-/** User trả về  từ GET /auth/me — kèm tập permission đã resolve. */
+/** User trả về từ GET /auth/me — kèm tập permission đã resolve. */
 export interface ICurrentUser {
   id: string;
   email: string;
