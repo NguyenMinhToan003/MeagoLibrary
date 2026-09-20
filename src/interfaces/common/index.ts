@@ -28,6 +28,12 @@ export interface IPaginatedResult<T> {
   hasPreviousPage?: boolean;
 }
 
+/** Danh sách dùng cursor thay vì offset — cho bảng lớn/append-only (vd audit_events). */
+export interface ICursorPaginatedResult<T> {
+  items: T[];
+  nextCursor: string | null;
+}
+
 export interface IBaseQuery<TSortBy extends string = string> {
   page?: number;
   limit?: number;

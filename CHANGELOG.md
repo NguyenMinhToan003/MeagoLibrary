@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.0
+
+- Added `ICursorPaginatedResult<T>` for cursor-based lists (audit trail and future append-only tables).
+- Added `IAuditEvent` and `IAuditEventQuery` contracts matching MeagoServer's audit trail module.
+- Added `EAuditOutcome` and `EAuditActorType` enums.
+
 ## 0.2.0
 
 - Added framework-neutral result, error, response, pagination and permission primitives.
