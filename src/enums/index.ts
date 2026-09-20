@@ -16,7 +16,7 @@ export enum EAuditOutcome {
   DENIED = 'denied',
 }
 
-/** Loại actor thực hiện hành động — mirror AuditActorType của MeagoServer (audit.types.ts) */
+/** Loại actor thực hiện hành động — mirror AuditActorType của MeagoServer  (audit.types.ts) */
 export enum EAuditActorType {
   USER = 'user',
   SYSTEM = 'system',
