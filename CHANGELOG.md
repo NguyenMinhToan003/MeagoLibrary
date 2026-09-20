@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Added `PERMISSIONS.AUDIT.READ` and `API_CONTROLLERS.AUDIT_EVENTS` for the audit trail history page.
+- Added `roles: string[]` to `ICurrentUser` for the profile page.
 
 ## 0.3.0
 
