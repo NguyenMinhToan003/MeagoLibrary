@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Added `PERMISSIONS.AUDIT.READ` and `API_CONTROLLERS.AUDIT_EVENTS` for the audit trail history page.
+
 ## 0.3.0
 
 - Added `ICursorPaginatedResult<T>` for cursor-based lists (audit trail and future append-only tables).

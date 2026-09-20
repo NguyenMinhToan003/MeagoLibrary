@@ -60,13 +60,13 @@ if errorlevel 1 (
 )
 
 echo.
-set "CONFIRM_PUBLISH=n"
-set /p "CONFIRM_PUBLISH=Phat hanh npm package moi? (y/N): "
-if /i not "%CONFIRM_PUBLISH%"=="y" goto :push_code
+set "CONFIRM_PUBLISH=y"
+set /p "CONFIRM_PUBLISH=Phat hanh npm package moi? (Y/n) [Enter = Y]: "
+if /i "%CONFIRM_PUBLISH%"=="n" goto :push_code
 
 :select_bump
 set "VERSION_BUMP=patch"
-set /p "VERSION_BUMP=Loai version patch/minor/major [patch]: "
+set /p "VERSION_BUMP=Loai version patch/minor/major [Enter = patch]: "
 if not defined VERSION_BUMP set "VERSION_BUMP=patch"
 if /i "%VERSION_BUMP%"=="patch" goto :bump_valid
 if /i "%VERSION_BUMP%"=="minor" goto :bump_valid
@@ -76,14 +76,14 @@ goto :select_bump
 
 :bump_valid
 echo [4/6] Tang %VERSION_BUMP% version, tao release commit va Git tag...
-call npm version "%VERSION_BUMP%" -m "chore(release): v%%s"
+call npm version "%VERSION_BUMP%" -m "chore(release): v%s"
 if errorlevel 1 goto :fail
 
 for /f "usebackq delims=" %%V in (`node -p "require('./package.json').version"`) do set "NEW_VERSION=%%V"
 echo Version se publish: %NEW_VERSION%
-set "CONFIRM_VERSION="
-set /p "CONFIRM_VERSION=Xac nhan publish @meago/core@%NEW_VERSION%? (y/N): "
-if /i not "%CONFIRM_VERSION%"=="y" (
+set "CONFIRM_VERSION=y"
+set /p "CONFIRM_VERSION=Xac nhan publish @meago/core@%NEW_VERSION%? (Y/n) [Enter = Y]: "
+if /i "%CONFIRM_VERSION%"=="n" (
   echo [STOP] Chua publish. Release commit/tag van o local de ban review.
   echo Neu muon huy, tu rollback bang Git sau khi kiem tra lich su.
   goto :success

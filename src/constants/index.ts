@@ -6,6 +6,7 @@ export const API_CONTROLLERS = {
   USERS: 'users',
   ROLES: 'roles',
   STORIES: 'stories',
+  AUDIT_EVENTS: 'audit-events',
 } as const;
 
 export const API_ACTIONS = {
@@ -35,5 +36,9 @@ export const PERMISSIONS = {
     CREATE: 'story:create',
     READ: 'story:read',
     MANAGE: 'story:manage',
+  },
+  /** Format "domain.resource.verb" — khác STORY/USER/ROLE, khớp AUDIT_PERMISSIONS phía server. */
+  AUDIT: {
+    READ: 'audit.events.read',
   },
 } as const;
