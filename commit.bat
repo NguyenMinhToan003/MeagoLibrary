@@ -45,12 +45,14 @@ echo [2/6] Stage va commit thay doi...
 git add -A
 git diff --cached --quiet
 if not errorlevel 1 (
-  echo [ERROR] Khong co thay doi de commit.
-  goto :fail
+  echo [INFO] Khong co thay doi de commit. Bo qua buoc commit, tiep tuc quy trinh.
+  goto :skip_commit
 )
 
 git commit -m "%COMMIT_MESSAGE%"
 if errorlevel 1 goto :git_fail
+
+:skip_commit
 
 echo [3/6] Dong bo origin/%CURRENT_BRANCH% bang rebase...
 git pull --rebase origin "%CURRENT_BRANCH%"
