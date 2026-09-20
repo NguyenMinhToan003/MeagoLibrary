@@ -1,6 +1,6 @@
 {
   "name": "@meago/core",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Framework-neutral contracts and core primitives for Meago applications",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
